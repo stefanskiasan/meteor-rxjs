@@ -24,6 +24,7 @@ var ZoneSubscriber = /** @class */ (function (_super) {
     __extends(ZoneSubscriber, _super);
     function ZoneSubscriber(destination, zone) {
         var _this = _super.call(this, destination) || this;
+        _this.destination = destination;
         _this.zone = zone;
         return _this;
     }

@@ -15,7 +15,7 @@ class ZoneOperator<T> implements Operator<T, T> {
 }
 
 class ZoneSubscriber<T> extends Subscriber<T> {
-  constructor(destination: Subscriber<T>,
+  constructor(public destination: Subscriber<T>,
               private zone: Zone) {
     super(destination);
   }
