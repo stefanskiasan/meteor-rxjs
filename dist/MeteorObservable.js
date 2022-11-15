@@ -1,8 +1,17 @@
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 import { Observable } from 'rxjs';
 import { isMeteorCallbacks, forkZone, removeObserver } from './utils';
 var liveSubscriptions = [];
 function throwInvalidCallback(method) {
-    throw new Error("Invalid " + method + " arguments:\n     your last param can't be a callback function,\n     please remove it and use \".subscribe\" of the Observable!");
+    throw new Error("Invalid ".concat(method, " arguments:\n     your last param can't be a callback function,\n     please remove it and use \".subscribe\" of the Observable!"));
 }
 /**
  * This is a class with static methods that wrap Meteor's API and return RxJS
@@ -58,7 +67,7 @@ var MeteorObservable = /** @class */ (function () {
         }
         var zone = forkZone();
         return Observable.create(function (observer) {
-            Meteor.call.apply(Meteor, [name].concat(args.concat([
+            Meteor.call.apply(Meteor, __spreadArray([name], args.concat([
                 function (error, result) {
                     zone.run(function () {
                         error ? observer.error(error) :
@@ -66,7 +75,7 @@ var MeteorObservable = /** @class */ (function () {
                         observer.complete();
                     });
                 }
-            ])));
+            ]), false));
         });
     };
     /**
@@ -137,7 +146,7 @@ var MeteorObservable = /** @class */ (function () {
         var zone = forkZone();
         var observers = [];
         var subscribe = function () {
-            return Meteor.subscribe.apply(Meteor, [name].concat(args.concat([{
+            return Meteor.subscribe.apply(Meteor, __spreadArray([name], args.concat([{
                     onError: function (error) {
                         zone.run(function () {
                             observers.forEach(function (observer) { return observer.error(error); });
@@ -149,7 +158,7 @@ var MeteorObservable = /** @class */ (function () {
                         });
                     }
                 }
-            ])));
+            ]), false));
         };
         var subHandler = null;
         return Observable.create(function (observer) {

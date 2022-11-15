@@ -1,3 +1,5 @@
+/// <reference types="@types/meteor" />
+/// <reference types="@types/meteor" />
 import { Observable } from 'rxjs';
 export declare class ObservableCursor<T> extends Observable<T[]> {
     private _zone;
@@ -27,7 +29,7 @@ export declare class ObservableCursor<T> extends Observable<T[]> {
      * Returns the actual Mongo.Cursor that wrapped by current ObservableCursor instance.
      * @return {Mongo.Cursor<T>} The actual MongoDB Cursor.
      */
-    readonly cursor: Mongo.Cursor<T>;
+    get cursor(): Mongo.Cursor<T>;
     /**
      * A wrapper for Mongo.Cursor.count() method - returns an Observable of number, which
      * triggers each time there is a change in the collection, and exposes the number of

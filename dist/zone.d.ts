@@ -1,2 +1,3 @@
 /// <reference types="zone.js" />
-export declare const zoneOperator: <T>(zone?: Zone) => (source: any) => any;
+import { Observable } from 'rxjs';
+export declare const zoneOperator: <T>(zone?: Zone) => (source: Observable<T>) => Observable<unknown>;

@@ -48,7 +48,7 @@ export var MongoObservable;
             get: function () {
                 return this._collection;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         /**

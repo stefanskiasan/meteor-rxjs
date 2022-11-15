@@ -1,8 +1,8 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('rxjs')) :
     typeof define === 'function' && define.amd ? define(['exports', 'rxjs'], factory) :
-    (global = global || self, factory((global.meteor = global.meteor || {}, global.meteor.rxjs = {}), global.rxjs));
-}(this, function (exports, rxjs) { 'use strict';
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory((global.meteor = global.meteor || {}, global.meteor.rxjs = {}), global.rxjs));
+})(this, (function (exports, rxjs) { 'use strict';
 
     var subscribeEvents = ['onReady', 'onError', 'onStop'];
     function isMeteorCallbacks(callbacks) {
@@ -55,18 +55,23 @@
     }
     var gZone = g.Zone ? g.Zone.current : fakeZone;
 
-    var __extends = (undefined && undefined.__extends) || (function () {
-        var extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var __extends$1 = (undefined && undefined.__extends) || (function () {
+        var extendStatics = function (d, b) {
+            extendStatics = Object.setPrototypeOf ||
+                ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+                function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+            return extendStatics(d, b);
+        };
         return function (d, b) {
+            if (typeof b !== "function" && b !== null)
+                throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
             extendStatics(d, b);
             function __() { this.constructor = d; }
             d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
         };
     })();
     var ObservableCursor = /** @class */ (function (_super) {
-        __extends(ObservableCursor, _super);
+        __extends$1(ObservableCursor, _super);
         /**
          * @constructor
          * @extends Observable
@@ -120,7 +125,7 @@
             get: function () {
                 return this._cursor;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         /**
@@ -228,6 +233,7 @@
         return ObservableCursor;
     }(rxjs.Observable));
 
+    exports.MongoObservable = void 0;
     (function (MongoObservable) {
         /**
          *  Creates a new MongoObservable.Collection from an existing of predefined Mongo.Collection.
@@ -273,7 +279,7 @@
                 get: function () {
                     return this._collection;
                 },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             /**
@@ -475,9 +481,18 @@
      * @property {Boolean} upsert - True to use upsert logic.
      */
 
+    var __spreadArray = (undefined && undefined.__spreadArray) || function (to, from, pack) {
+        if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+            if (ar || !(i in from)) {
+                if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+                ar[i] = from[i];
+            }
+        }
+        return to.concat(ar || Array.prototype.slice.call(from));
+    };
     var liveSubscriptions = [];
     function throwInvalidCallback(method) {
-        throw new Error("Invalid " + method + " arguments:\n     your last param can't be a callback function,\n     please remove it and use \".subscribe\" of the Observable!");
+        throw new Error("Invalid ".concat(method, " arguments:\n     your last param can't be a callback function,\n     please remove it and use \".subscribe\" of the Observable!"));
     }
     /**
      * This is a class with static methods that wrap Meteor's API and return RxJS
@@ -533,7 +548,7 @@
             }
             var zone = forkZone();
             return rxjs.Observable.create(function (observer) {
-                Meteor.call.apply(Meteor, [name].concat(args.concat([
+                Meteor.call.apply(Meteor, __spreadArray([name], args.concat([
                     function (error, result) {
                         zone.run(function () {
                             error ? observer.error(error) :
@@ -541,7 +556,7 @@
                             observer.complete();
                         });
                     }
-                ])));
+                ]), false));
             });
         };
         /**
@@ -612,7 +627,7 @@
             var zone = forkZone();
             var observers = [];
             var subscribe = function () {
-                return Meteor.subscribe.apply(Meteor, [name].concat(args.concat([{
+                return Meteor.subscribe.apply(Meteor, __spreadArray([name], args.concat([{
                         onError: function (error) {
                             zone.run(function () {
                                 observers.forEach(function (observer) { return observer.error(error); });
@@ -624,7 +639,7 @@
                             });
                         }
                     }
-                ])));
+                ]), false));
             };
             var subHandler = null;
             return rxjs.Observable.create(function (observer) {
@@ -699,11 +714,16 @@
         return MeteorObservable;
     }());
 
-    var __extends$1 = (undefined && undefined.__extends) || (function () {
-        var extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var __extends = (undefined && undefined.__extends) || (function () {
+        var extendStatics = function (d, b) {
+            extendStatics = Object.setPrototypeOf ||
+                ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+                function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+            return extendStatics(d, b);
+        };
         return function (d, b) {
+            if (typeof b !== "function" && b !== null)
+                throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
             extendStatics(d, b);
             function __() { this.constructor = d; }
             d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -720,7 +740,7 @@
         return ZoneOperator;
     }());
     var ZoneSubscriber = /** @class */ (function (_super) {
-        __extends$1(ZoneSubscriber, _super);
+        __extends(ZoneSubscriber, _super);
         function ZoneSubscriber(destination, zone) {
             var _this = _super.call(this, destination) || this;
             _this.destination = destination;
@@ -751,7 +771,5 @@
     exports.MeteorObservable = MeteorObservable;
     exports.ObservableCursor = ObservableCursor;
     exports.zoneOperator = zoneOperator;
-
-    Object.defineProperty(exports, '__esModule', { value: true });
 
 }));

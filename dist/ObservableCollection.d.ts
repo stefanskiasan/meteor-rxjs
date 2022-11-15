@@ -1,3 +1,4 @@
+/// <reference types="@types/meteor" />
 import { Observable } from 'rxjs';
 import { ObservableCursor } from './ObservableCursor';
 import Selector = Mongo.Selector;
@@ -49,7 +50,7 @@ export declare module MongoObservable {
          *  Returns the Mongo.Collection object that wrapped with the MongoObservable.Collection.
          *  @returns {Mongo.Collection<T>} The Collection instance
          */
-        readonly collection: Mongo.Collection<T>;
+        get collection(): Mongo.Collection<T>;
         /**
          *  Allow users to write directly to this collection from client code, subject to limitations you define.
          *
@@ -172,6 +173,31 @@ export declare module MongoObservable {
             reactive?: boolean;
             transform?: Function;
         }): T;
-        private _createObservable<T>(observers);
+        private _createObservable;
     }
 }
+/**
+ * An options object for MongoDB queries.
+ * @typedef {Object} Collection~MongoQueryOptions
+ * @property {Object} sort - Sort order (default: natural order)
+ * @property {Number} skip - Number of results to skip at the beginning
+ * @property {Object} fields - Dictionary of fields to return or exclude.
+ * @property {Boolean} reactive - (Client only) Default true; pass false to disable reactivity
+ * @property {Function} transform - Overrides transform on the Collection for this cursor. Pass null to disable transformation.
+ */
+/**
+ * A MongoDB query selector representation.
+ * @typedef {(Mongo.Selector|Mongo.ObjectID|string)} Collection~MongoQuerySelector
+ */
+/**
+ * A MongoDB query options for upsert action
+ * @typedef {Object} Collection~MongoUpsertOptions
+ * @property {Boolean} multi - True to modify all matching documents;
+ * false to only modify one of the matching documents (the default).
+ */
+/**
+ * A MongoDB query options for update action
+ * @typedef {Object} Collection~MongoUpdateOptions
+ * @property {Boolean} multi - True to modify all matching documents;
+ * @property {Boolean} upsert - True to use upsert logic.
+ */
